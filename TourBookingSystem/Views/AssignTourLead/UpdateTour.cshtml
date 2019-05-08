@@ -1,0 +1,12 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+@{ 
+    string tourid = ViewBag.tour;
+    string leaderid = ViewBag.leader;
+}
+<h2>The Tour Leader whose Id is "@leaderid" is now sucessfully assigned to the Tour of Id "@tourid"</h2>
+<input type="button" value="Back To Home" onclick="location.href='http://localhost:59433'" />

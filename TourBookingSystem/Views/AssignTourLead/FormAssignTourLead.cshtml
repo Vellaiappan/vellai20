@@ -1,0 +1,24 @@
+﻿
+@{
+    Layout = null;
+}
+@using FSTAADLC2.Models;
+@{ 
+    List<TourDTO> tlist = ViewBag.list;
+}
+<h2 align="center">Assign Tour Lead</h2><br />
+<a href="http://localhost:59433/AssignTourLead/FormAssignTourLead">Assign Tour Lead</a>
+<a href="http://localhost:59433/EnquireTourLeadCost/EnquireTourLeadCost">Enquire Tour Lead Cost</a>
+<br /><hr />
+<form align="center" method="post" action="http://localhost:59433/AssignTourLead/GetTour">
+    Select Tour(ID):<select name="TourList" id="TourList" required>
+        @foreach(TourDTO t in tlist)
+        {
+         <option value="@t.Id">@t.Id</option>
+        }
+    </select>
+    <br /><br />
+    <input type="submit" value="Submit" />
+</form>
+
+

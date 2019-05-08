@@ -1,0 +1,76 @@
+﻿
+@{
+    Layout = null;
+}
+@using FSTAADLC2.Models;
+@{
+    TourDTO t = ViewBag.Tour;
+    List<TourLeadDTO> list = ViewBag.Leads;
+}
+<h2>Tour Details:</h2>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Region</th>
+        <th>MinPax</th>
+        <th>MaxPax</th>
+        <th>NumOfPassengers</th>
+        <th>NumOfDays</th>
+        <th>DepatureDate</th>
+        <th>ArrivalDate</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td>@t.Id</td>
+        <td>@t.Name</td>
+        <td>@t.Price</td>
+        <td>@t.Region</td>
+        <td>@t.MinPax</td>
+        <td>@t.MaxPax</td>
+        <td>@t.NumOfPassengers</td>
+        <td>@t.NumOfDays</td>
+        <td>@t.DepartureDate.ToString("yyyy-MM-dd")</td>
+        <td>@t.ArrivalDate.ToString("yyyy-MM-dd")</td>
+        <td>@t.Status</td>
+    </tr>
+</table>
+<br /><br />
+<hr />
+@if (t.NumOfPassengers >= t.MinPax)
+{
+    <h2>Select Leader:</h2>
+    <form method="post" action="http://localhost:59433/AssignTourLead/UpdateTour">
+        <table border="1">
+            <tr>
+                <th>Select</th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>ContactNumber</th>
+                <th>EmailAddress</th>
+                <th>Type</th>
+            </tr>
+            @foreach (TourLeadDTO T in list)
+            {
+                <tr>
+                    <td><input type="radio" name="leader" value="@T.Id" /></td>
+                    <td>@T.Id</td>
+                    <td>@T.Name</td>
+                    <td>@T.ContactNumber</td>
+                    <td>@T.EmailAddress</td>
+                    <td>@T.Type</td>
+                </tr>
+            }
+        </table>
+        <br>
+        <input type="hidden" name="tour" value="@t.Id" />
+        <input type="submit" value="Submit" />
+        <input type="button" value="Back" onclick="location.href='http://localhost:59433'" />
+    </form>
+}
+else
+{
+    <h3>The selected Tour of ID "@t.Id" doesnot have minimum passenger bookings to assign a tour leader. </h3>
+    <input type="button" value="Cancel" onclick="location.href='http://localhost:59433'" />
+}

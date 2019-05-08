@@ -1,0 +1,80 @@
+﻿
+@{
+    Layout = null;
+}
+@using FSTAADLC2.Models;
+<h2>Leader Details:</h2>
+@{
+    Boolean flag = ViewBag.flag;
+    if (flag)
+    {
+        string type = ViewBag.Type;
+        int day = ViewBag.day;
+        if (type == "Part")
+        {
+            PartTimeTourLeader p = ViewBag.Leader;
+            int Cost = ViewBag.Cost;
+            <table border="1">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>ContactNumber</th>
+                    <th>EmailAddress</th>
+                    <th>Type</th>
+                    <th>DailySalaryRate</th>
+                    <th>DestinationOpted</th>
+                </tr>
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.Name</td>
+                    <td>@p.ContactNumber</td>
+                    <td>@p.EmailAddress</td>
+                    <td>@p.Type</td>
+                    <td>@p.DailySalaryRate</td>
+                    <td>@p.TourDestinationOpted</td>
+                </tr>
+            </table>
+            <h2>Lead Cost for @day days: S$ @Cost</h2>
+            <br />
+            <input type="button" value="Back" onclick="location.href='http://localhost:59433/EnquireTourLeadCost/EnquireTourLeadCost'" />
+        }
+        else
+        {
+            FullTimeTourLeader p = ViewBag.Leader;
+            int Cost = ViewBag.Cost;
+            <table border="1">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>ContactNumber</th>
+                    <th>EmailAddress</th>
+                    <th>Type</th>
+                    <th>Salary</th>
+                    <th>LeaveEntitled</th>
+                    <th>Rank</th>
+                </tr>
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.Name</td>
+                    <td>@p.ContactNumber</td>
+                    <td>@p.EmailAddress</td>
+                    <td>@p.Type</td>
+                    <td>@p.Salary</td>
+                    <td>@p.LeaveEntitled</td>
+                    <td>@p.Rank</td>
+                </tr>
+            </table>
+            <h2>Lead Cost for @day days: S$ @Cost</h2>
+            <br />
+            <input type="button" value="Back" onclick="location.href='http://localhost:59433/EnquireTourLeadCost/EnquireTourLeadCost'" />
+        }
+    }
+    else
+    {
+        string message = ViewBag.Message;
+        <h2 align="center">@message</h2>
+        <input type="button" value="Back" align="centers" onclick="location.href='http://localhost:59433/EnquireTourLeadCost/EnquireTourLeadCost'" />
+    }
+}
+
+
