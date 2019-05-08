@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "ViewSelection";
+}
+@{ string sessionid = ViewBag.session;}
+@using CAShoppingCart.Models;
+<header>
+    <img src="~/Photos/cart logo.png" align="left" height="150" />
+    <h1>HORIZON</h1>
+    <p> (We Care Your Products) </p>
+    <marquee behavior="scroll" direction="right">Apply Coupon Code <i><u> "white" </u></i> for an offer of 10SGD....Have a nice day!</marquee>
+</header>
+<hr>
+<br /><br />
+@{ 
+    //Getting the product values from controller
+    List<Product> plist = ViewBag.list;
+}
+<table>
+    <tr>
+        <td><h3>View Cart</h3></td>
+        <td> | </td>
+        <td><a href="#" onclick="history.go(-1)">Continue Shopping</a></td>
+        <td> | </td>
+        <td>
+            <!--To send selected products id and quantity to next controller -->
+            <form action="~/Order/ViewPurchase" method="post" id="myform">
+                <input type="hidden" value="" id="product" name="product" />
+                <input type="hidden" value="@sessionid" id="session" name="session" />
+                <input type="hidden" value="" id="quantity" name="quantity" />
+                <a onclick="myFunPar1()">CheckOut</a>
+            </form>
+        </td>
+    </tr>
+</table>
+<script>
+    //Submit form when required condition is satisfied
+    function myFunPar1() {
+        var flag = myFunPar();
+        if (flag) {
+            alert("Order Placed Successfully.");
+            document.getElementById("myform").submit();
+        }
+    }
+    //Check the all selected product quantity is not zero for form to be submitted.
+    function myFunPar() {
+        var count = parseInt(document.getElementById("count").value)-1;
+        var quan = "";
+        var prod = "";
+        for (var k = 1; k <= count; k++) {
+            var m = k + 20;
+            var n = m.toString();
+            var l = k.toString();
+            if (parseInt(document.getElementById(l).value) > 0) {
+                quan = quan + document.getElementById(l).value + ",";
+                prod = prod + document.getElementById(n).value + ",";
+            }
+        }
+        document.getElementById("quantity").value = quan.slice(0, -1);
+        document.getElementById("product").value = prod.slice(0, -1);
+        return true;
+    }
+    //Calculate the total price of product on quantity increment
+    function myFun(element, price, element2) {
+        element = element.toString();
+        element2 = element2.toString();
+        var a = parseInt(document.getElementById(element).value) + 1;
+        document.getElementById(element).value = a;
+        var total = a * price;
+        document.getElementById(element2).value = total;
+        var flag = true;
+        myOver(price, flag);
+    }
+    //calculate the total price of product on quantity decrement
+    function myFun1(element, price, element2) {
+        element = element.toString();
+        element2 = element2.toString();
+        if (parseInt(document.getElementById(element).value) > 0) {
+            var a = parseInt(document.getElementById(element).value) - 1;
+            document.getElementById(element).value = a;
+            var total = a * price;
+            document.getElementById(element2).value = total;
+            var flag = false;
+            myOver(price, flag);
+        }
+        else {
+            alert("Quantity is Zero.");
+        }
+    }
+    //calculate overall price of all products.
+    function myOver(price, flag) {
+        if (flag)
+            document.getElementById("overall").value = parseInt(document.getElementById("overall").value) + price;
+        else
+            document.getElementById("overall").value = parseInt(document.getElementById("overall").value) - price;
+    }
+    //check coupon code and apply 10$ discount on overall price.
+    function myFun3() {
+        var coup = document.getElementById("coupon").value.toString();
+        if (coup.toLowerCase() == "white") {
+            document.getElementById("overall").value = parseInt(document.getElementById("overall").value) - 10;
+            if (parseInt(document.getElementById("overall").value) < 0)
+                document.getElementById("overall").value = 0;
+            document.getElementById("coup").disabled = true;
+        }
+        else if (parseInt(document.getElementById("overall").value) <= 0) {
+            alert("Please add product quantity.");
+        }
+        else {
+            alert("Enter a valid coupon");
+        }
+    }
+</script>
+<center><h2>List of Selected Products</h2></center>
+<br />
+<table border="1" align="center" style="border-spacing:20px;border-collapse: separate;border:none;">
+
+    @{
+        //i and j for giving different id's to quantity and total price. 
+        int i = 1, j = 11,overallPrice = 0;
+        //Display the selected products from gallery.
+        foreach (Product p in plist)
+        {
+            overallPrice += p.ProductPrice;
+            <tr>
+                <td align="center">
+                    <img src="@Url.Content(p.ProductImage)" alt="@p.ProductImage" height="100" align="middle" /><br />
+                    <b>Product-Name:</b>@p.ProductName<br />
+                    <b>Product-Description:</b>@p.ProductDescription<br />
+                </td>
+                <td align="left">
+                    <b>Product-Price:S$</b>@p.ProductPrice<br />
+                    <b>Quantity     :</b><input type="number" id="@i" name="quan" min="0" value="1" size="50" readonly /><button onclick="myFun(@i,@p.ProductPrice,@j);">+</button>
+                    <button onclick="myFun1(@i,@p.ProductPrice,@j);">-</button><br />
+                    <input type="hidden" id="@(i+20)" value="@p.ProductId" />
+                    <b>Total-Price(in S$):</b><input type="number" id="@j" name="tot" min="0" value="@p.ProductPrice" style="border:none;" readonly />
+                </td>
+            </tr>
+            i++; j++;
+        }
+    }
+</table>
+<input type="hidden" id="count" value="@i" />
+<table align="right">
+    <tr><th>Coupon</th><td><input type="text" id="coupon" /><button id="coup" onclick="myFun3();">Apply</button></td></tr>
+    <tr>
+        <th>Overall Price(in S$)</th>
+        <td><input type="number" id="overall" value="@overallPrice" style="border:none;" readonly /></td>
+    </tr>
+</table>
+<br />
+
+

@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "ViewGallery";
+}
+@using CAShoppingCart.Models;
+<header>
+    <img src="~/Photos/cart logo.png" align="left" height="150" />
+    <h1>HORIZON</h1>
+    <p> (We Care Your Products) </p>
+    <marquee behavior="scroll" direction="right">Apply Coupon Code <i><u> "white" </u></i> for an offer of 10SGD....Have a nice day!</marquee>
+</header>
+<hr>
+<br />
+@{
+    //Getting the values from controller
+    List<Product> plist = ViewBag.list;
+    string name = ViewBag.Name;
+    string sessionid = ViewBag.Session;
+}
+<!--For displaying cont of products in cart -->
+<style>
+    .cart {
+        height: 30px;
+        width: 30px;
+        background: #fff;
+        color: #000;
+        text-align: center;
+        border-radius: 50%;
+        font-size: 10pt;
+    }
+</style>
+<input style="float:right" type="text" id="cart" name="cart" class="cart" value="0" size="1" readonly />
+<!--For sending values from here to cart contoller on image clicking -->
+<form action="~/ShoppingCart/ViewSelection" method="post" onsubmit="return myFun2();">
+    <input type="hidden" value="" id="selection" name="selection" />
+    <input type="hidden" value="@sessionid" id="session" name="session" />
+    <input style="float:right" type="image" src="~/Photos/cart.png" height="75" alt="Submit" />
+</form>
+<table>
+    <tr>
+        <td><h3>Hello @name</h3></td>
+        <td> | </td>
+        <td><a href="~/Purchase/ViewOrder?sessionid=@sessionid">My Purchases</a></td>
+        <td> | </td>
+        <td><a href="~/Logout/LogoutSession?sessionid=@sessionid">Logout</a></td>
+    </tr>
+</table>
+<center><input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for Products.." title="Type in a name"></center>
+<script>
+    //For selecting the product if it is not already selected in cart
+    function myFun(element) {
+        element = element.toString();
+        if (!document.getElementById(element).checked) {
+            document.getElementById(element).checked = true;
+            myFuncart(element);
+        }
+
+    }
+    //For displaying the count of products selected in cart.
+    function myFuncart(element) {
+        var value = parseInt(document.getElementById("cart").value);
+        if (document.getElementById(element).checked) {
+            document.getElementById("cart").value = value + 1;
+        }
+    }
+    //For getting the products Id which are all selected.
+    function myFun2() {
+        if (parseInt(document.getElementById("cart").value) == 0) {
+            alert("Cart is empty");
+            return false;
+        }
+        if (document.getElementById("0").checked) {
+            document.getElementById("selection").value += "'Prod1',";
+        }
+        if (document.getElementById("1").checked) {
+            document.getElementById("selection").value += "'Prod2',";
+        }
+        if (document.getElementById("2").checked) {
+            document.getElementById("selection").value += "'Prod3',";
+        }
+        if (document.getElementById("3").checked) {
+            document.getElementById("selection").value += "'Prod4',";
+        }
+        if (document.getElementById("4").checked) {
+            document.getElementById("selection").value += "'Prod5',";
+        }
+        if (document.getElementById("5").checked) {
+            document.getElementById("selection").value += "'Prod6',";
+        }
+        return true;
+    }
+    //For performing search on the products list.
+    function myFunction() {
+        var input = document.getElementById("myInput");
+        var filter = input.value.toLowerCase();
+        var nodes = document.getElementsByClassName('display');
+
+        for (i = 0; i < nodes.length; i++) {
+            if (nodes[i].innerText.toLowerCase().includes(filter)) {
+                nodes[i].style.display = "block";
+            } else {
+                nodes[i].style.display = "none";
+            }
+        }
+    }
+</script>
+<style>
+    .display {
+        text-align: center;
+        border: 1px solid black;
+        padding: 10px;
+        width: 250px;
+        height: 300px;
+        margin: 50px;
+        float: left;
+        vertical-align: middle;
+    }
+</style>
+<center><h2>List of Products</h2></center>
+<br />
+@{ 
+    //Converting the product list to array to have different id's for checkbox through 'j' Value.
+    Product[] p = new Product[plist.Count()];
+    int i = 0;
+    foreach (Product pr in plist)
+    {
+        p[i] = pr;
+        i++;
+    }
+}
+@{ for (int j = 0; j < p.Length; j++)
+    {
+        <div align="center" class="display">
+            <img src="@Url.Content(p[j].ProductImage)" alt="@p[j].ProductImage" height="100" /><br />
+            <b>Product-Name:</b>@p[j].ProductName<br />
+            <b>Product-Description:</b>@p[j].ProductDescription<br />
+            <b>Product-Price:S$</b>@p[j].ProductPrice<br />
+            <input type="checkbox" id="@j" name="@p[j].ProductId" style="display:none;" />
+            <button onclick="myFun(@j);">Add Cart</button>
+        </div>
+    }
+}
+<br />
+
+
+

@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "ViewOrder";
+}
+
+@using CAShoppingCart.Models;
+@{ 
+    //Getting the orders from controller
+    string sessionid = ViewBag.session;
+    List<Order> olist = ViewBag.list;
+}
+<header>
+    <img src="~/Photos/cart logo.png" align="left" height="150" />
+    <h1>HORIZON</h1>
+    <p> (We Care Your Products) </p>
+    <marquee behavior="scroll" direction="right">Apply Coupon Code <i><u> "white" </u></i> for an offer of 10SGD....Have a nice day!</marquee>
+</header>
+<hr>
+<br /><br />
+<table>
+    <tr>
+        <td><h3>My Purchases</h3></td>
+        <td> | </td>
+        <td><a href="~/Gallery/ViewGallery?sessionid=@sessionid">Home</a></td>
+        <td> | </td>
+        <td>
+            <a href="~/Logout/LogoutSession?sessionid=@sessionid">Logout</a>
+        </td>
+    </tr>
+</table>
+ @if(olist.Count==0)
+     {
+      //If no orders placed by customer.
+      <h2>No Orders has been purchased.</h2>
+     }
+<table border="1" align="center" style="border-spacing:20px;border-collapse: separate;border:none;">
+    @{
+        //Displaying the list of orders made by customer.
+        foreach (Order o in olist)
+        {
+            string act = o.ActivationCode;
+            string[] activation = act.Split(',');
+            <tr>
+                <td align="center">
+                    <img src="@Url.Content(o.ProductImage)" alt="@o.ProductImage" height="100" align="middle" /><br />
+                    <b>Product-Name:</b>@o.ProductName<br />
+                    <b>Product-Description:</b>@o.ProductDescription<br />
+                    <button>Download</button>
+                </td>
+                <td align="left">
+                    <b>PurchasedOn:</b>@o.PurchasedOn<br />
+                    <b>Quantity:</b>@o.Quantity<br />
+                    <b>ActivationCode:</b>
+                    @if ((activation.Length - 1) != 1)
+                    {
+                        //Activation code contains multiple values as single string separated by ',' so we are separating and adding to dropdown/text.
+                        <select>
+                            @for (int j = 0; j < activation.Length - 1; j++)
+                            {
+                                <option>@activation[j]</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        @activation[0]
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>

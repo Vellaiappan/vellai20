@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<header>
+    <img src="~/Photos/cart logo.png" align="left" height="150" />
+    <h1>HORIZON</h1>
+    <p> (We Care Your Products) </p>
+    <marquee behavior="scroll" direction="right">Apply Coupon Code <i><u> "white" </u></i> for an offer of 10SGD....Have a nice day!</marquee>
+</header>
+<hr>
+<br /><br />
+<center><h2>Customer Login</h2></center>
+@{ //Incorrect username and password check.
+    string flag = ViewBag.flag;
+    string message = ViewBag.Message;
+    if (flag=="true")
+    {
+        <h3 align="center" color="Red"><b>@message</b></h3>
+    }
+}
+@model CAShoppingCart.Models.Login
+@using (Html.BeginForm("Index", "Login", FormMethod.Post))
+{
+    //login form
+    <center>
+        <table align="center">
+            <tr>
+                <td>@Html.LabelFor(mod => mod.Username)</td>
+                <td>@Html.TextBoxFor(mod => mod.Username)</td>
+                <td>@Html.ValidationMessageFor(mod => mod.Username)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(x => x.Password)</td>
+                <td>@Html.PasswordFor(x => x.Password)</td>
+                <td>@Html.ValidationMessageFor(x => x.Password)</td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right"><input type="submit" value="Submit"></td>
+            </tr>
+        </table>
+    </center>
+    <hr>
+    <footer>
+        <center>
+            <p>Posted by: HORIZON Tech Team</p>
+            <p>
+                Contact information: <a href="mailto:someone@example.com">
+                    HORIZONsomeone@example.com
+                </a>
+            </p>
+        </center>
+    </footer>
+
+}
+
+<style>
+    .field-validation-error {
+        color: darkred;
+    }
+
+    tr, td {
+        padding: 2px
+    }
+</style>
